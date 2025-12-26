@@ -6,6 +6,11 @@ export const getAIHealthAdvice = async (
   medicineName: string,
   logs: MedicationLog[]
 ): Promise<AIAdvice> => {
+  if (!process.env.API_KEY) {
+    console.warn("API Key is missing. Using default advice.");
+    return { message: "记得按时吃药哦，祝您早日康复！", type: "encouragement" };
+  }
+
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   
   // 记录是按照时间倒序排列的（最新的在前面），所以取前5条即为最近5条
